@@ -1,2 +1,4 @@
 axi_lite_seq_item_xc.sv is tested together with base_test.sv and test_bench.sv on eda playground with uvm 1.2 and synopsys.
 To test, rename axi_lite_seq_item_xc to axi_lite_seq_item
+
+Stew: EDA playgroud for midterm - https://www.edaplayground.com/x/8MvT
