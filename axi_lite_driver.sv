@@ -19,7 +19,7 @@ class axi_lite_driver extends uvm_driver#(axi_lite_seq_item);
       axi_lite_seq_item req;
  
       forever begin
-         @vif.master/slave_cb;
+         @vif.master_cb;
          seq_item_port.get_next_item(req);
          //"drive the bus"
          seq_item_port.item_done();
