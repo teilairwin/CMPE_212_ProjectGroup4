@@ -13,8 +13,16 @@ class axi_lite_monitor extends uvm_monitor#(axi_lite_seq_item);
    endfunction: new
 
    function void build_phase(uvm_phase phase);
+     axi_lite_agent agent;
       super.build_phase(phase);
-      uvm_config_db#(virtual axi_lite_if)::get(this,"","vif",vif)
+     if ($cast(agent, get_parent()) && agent != null) begin
+       vif = agent.vif;
+     end
+     else begin
+       if (!uvm_config_db#(virtual axi_lite_if)::get(this,"","vif",vif)) begin
+         `uvm_fatal("APB/MON/NOVIF", "uh oh");
+       end
+     end
    endfunction: build_phase
 
    task run_phase(uvm_phase phase);

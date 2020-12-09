@@ -46,7 +46,7 @@ class axil_base_test extends uvm_test;
     phase.raise_objection( this, "Starting apb_base_seqin main phase" );
     reset_done.wait_trigger();
     $display("%t Starting sequence axil_seq run_phase",$time);
-    axil_seq.start(env.agt.sqr);
+    axil_seq.start(env.agt.al_seqr);
     #100ns;
     phase.drop_objection( this , "Finished axil_seq in main phase" );
   endtask: run_phase

@@ -6,7 +6,7 @@
 `ifndef AXI_LITE_IF_SV
 `define AXI_LITE_IF_SV
 
-interface axi_lite_if(input logic aclk, input logic arst_n);
+interface axi_lite_if(input logic aclk, input logic arst);
 
 //Define axi lite fields 
 // Master In/ Slave out

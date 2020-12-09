@@ -9,6 +9,7 @@ import uvm_pkg::*;
 `include "axi_lite_driver.sv"
 `include "axi_lite_monitor.sv"
 `include "axi_lite_agent.sv"
+`include "axil_scoreboard.sv"
 // Env Files
 `include "axil_config.sv"
 `include "axil_sequence.sv"
@@ -23,7 +24,7 @@ import uvm_pkg::*;
 module tb_top;
 
    	logic aclk;
-   	logic arst; 
+   	logic arst;
    
     // Master In/ Slave out
     logic       awready;
@@ -80,7 +81,7 @@ module tb_top;
       // Master Agent here
       .m2s_aw_addr  (),// DUT In  [63:0]
       .m2s_aw_valid (),// DUT In        
-      .m2s_aw_id,   (),// DUT In  [ 3:0]
+      .m2s_aw_id   (),// DUT In  [ 3:0]
       .m2s_aw_prot  (),// DUT In  [ 2:0]
       .m2s_aw_ready (),// Out           
       .m2s_wdata    (),// DUT In  [63:0]
@@ -105,7 +106,7 @@ module tb_top;
       // Slave agent here
       .s2m_aw_addr  (),// Out     [63:0]
       .s2m_aw_valid (),// Out           
-      .s2m_aw_id,   (),// Out     [ 3:0]
+      .s2m_aw_id   (),// Out     [ 3:0]
       .s2m_aw_prot  (),// Out     [ 2:0]
       .s2m_aw_ready (),// DUT In        
       .s2m_wdata    (),// Out     [63:0]
@@ -129,29 +130,29 @@ module tb_top;
     );      
    	
    	//connect interface 
-   	assign axi_lite_if_inst.awready  = m2s_aw_ready;
-   	assign axi_lite_if_inst.wready   = m2s_wready  ;
-   	assign axi_lite_if_inst.arready  = m2s_ar_ready;
-   	assign axi_lite_if_inst.rdata    = m2s_rdata   ;
-   	assign axi_lite_if_inst.rvalid   = m2s_rvalid  ;
-   	assign axi_lite_if_inst.rid      = m2s_rid     ;
-   	assign axi_lite_if_inst.rresp    = m2s_rrsesp  ;// Dut spelling bug
-   	assign axi_lite_if_inst.bvalid   = m2s_bvalid  ;
-   	assign axi_lite_if_inst.bresp    = m2s_bresp   ;
+   	assign axi_lite_if_inst.awready  = axil_dut_inst.m2s_aw_ready;
+    assign axi_lite_if_inst.wready   = axil_dut_inst.m2s_wready  ;
+    assign axi_lite_if_inst.arready  = axil_dut_inst.m2s_ar_ready;
+    assign axi_lite_if_inst.rdata    = axil_dut_inst.m2s_rdata   ;
+    assign axi_lite_if_inst.rvalid   = axil_dut_inst.m2s_rvalid  ;
+    assign axi_lite_if_inst.rid      = axil_dut_inst.m2s_rid     ;
+    assign axi_lite_if_inst.rresp    = axil_dut_inst.m2s_rrsesp  ;// Dut spelling bug
+    assign axi_lite_if_inst.bvalid   = axil_dut_inst.m2s_bvalid  ;
+    assign axi_lite_if_inst.bresp    = axil_dut_inst.m2s_bresp   ;
      
-   	assign m2s_aw_addr	   = axi_lite_if_inst.awaddr;
-   	assign m2s_aw_valid	   = axi_lite_if_inst.awvalid;
-   	assign m2s_aw_id	   = axi_lite_if_inst.awid;
-   	assign m2s_aw_prot	   = axi_lite_if_inst.awprot;
-   	assign m2s_wvalid	   = axi_lite_if_inst.wvalid;
-   	assign m2s_wdata	   = axi_lite_if_inst.wdata;
-   	assign m2s_wstrb	   = axi_lite_if_inst.wstrb;
-   	assign m2s_ar_addr	   = axi_lite_if_inst.araddr;
-   	assign m2s_ar_id	   = axi_lite_if_inst.arid;
-   	assign m2s_ar_valid	   = axi_lite_if_inst.arvalid;
-   	assign m2s_ar_prot	   = axi_lite_if_inst.arprot;
-   	assign m2s_rready	   = axi_lite_if_inst.rready;
-   	assign m2s_bready	   = axi_lite_if_inst.bready;
+  	assign axil_dut_inst.m2s_aw_addr	   = axi_lite_if_inst.awaddr;
+	assign axil_dut_inst.m2s_aw_valid	   = axi_lite_if_inst.awvalid;
+	assign axil_dut_inst.m2s_aw_id	   = axi_lite_if_inst.awid;
+	assign axil_dut_inst.m2s_aw_prot	   = axi_lite_if_inst.awprot;
+	assign axil_dut_inst.m2s_wvalid	   = axi_lite_if_inst.wvalid;
+	assign axil_dut_inst.m2s_wdata	   = axi_lite_if_inst.wdata;
+	assign axil_dut_inst.m2s_wstrb	   = axi_lite_if_inst.wstrb;
+	assign axil_dut_inst.m2s_ar_addr	   = axi_lite_if_inst.araddr;
+	assign axil_dut_inst.m2s_ar_id	   = axi_lite_if_inst.arid;
+	assign axil_dut_inst.m2s_ar_valid	   = axi_lite_if_inst.arvalid;
+	assign axil_dut_inst.m2s_ar_prot	   = axi_lite_if_inst.arprot;
+	assign axil_dut_inst.m2s_rready	   = axi_lite_if_inst.rready;
+	assign axil_dut_inst.m2s_bready	   = axi_lite_if_inst.bready;
 
   	initial begin
     	//Pass this physical interface to test top (which will further pass it down to env->agent->drv/sqr/mon

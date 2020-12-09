@@ -2,79 +2,79 @@
 //DUT
 //------------------------------------
 module axi_lite_1x1 (
-  input  logic        aclk,
-  input  logic        arst_n,
-  input  logic [63:0] m2s_aw_addr,
-  input  logic        m2s_aw_valid,
-  input  logic [ 3:0] m2s_aw_id,
-  input  logic [ 2:0] m2s_aw_prot,
-  output logic        m2s_aw_ready,
-  input  logic [63:0] m2s_wdata,
-  input  logic        m2s_wvalid,
-  input  logic [ 8:0] m2s_wstrb,
-  output logic        m2s_wready,
-  input  logic [63:0] m2s_ar_addr,
-  input  logic        m2s_ar_valid,
-  input  logic [ 3:0] m2s_ar_id,
-  input  logic [ 2:0] m2s_ar_prot,
-  output logic        m2s_ar_ready,
-  output logic [63:0] m2s_rdata,
-  output logic        m2s_rvalid,
-  output logic [ 3:0] m2s_rid,
-  output logic [ 1:0] m2s_rrsesp,
-  input  logic        m2s_rready,
-  output logic        m2s_bvalid,
-  output logic [ 3:0] m2s_bid,
-  output logic [ 1:0] m2s_bresp,
-  input  logic        m2s_bready,
-  output logic [63:0] s2m_aw_addr,
-  output logic        s2m_aw_valid,
-  output logic [ 3:0] s2m_aw_id,
-  output logic [ 2:0] s2m_aw_prot,
-  input  logic        s2m_aw_ready,
-  output logic [63:0] s2m_wdata,
-  output logic        s2m_wvalid,
-  output logic [ 8:0] s2m_wstrb,
-  input  logic        s2m_wready,
-  output logic [63:0] s2m_ar_addr,
-  output logic        s2m_ar_valid,
-  output logic [ 3:0] s2m_ar_id,
-  output logic [ 2:0] s2m_ar_prot,
-  input  logic        s2m_ar_ready,
-  input  logic [63:0] s2m_rdata,
-  input  logic        s2m_rvalid,
-  input  logic [ 3:0] s2m_rid,
-  input  logic [ 1:0] s2m_rrsesp,
-  output logic        s2m_rready,
-  input  logic        s2m_bvalid,
-  input  logic [ 3:0] s2m_bid,
-  input  logic [ 1:0] s2m_bresp,
-  output logic        s2m_bready
+  input  wire        aclk,
+  input  wire        arst_n,
+  input  wire [63:0] m2s_aw_addr,
+  input  wire        m2s_aw_valid,
+  input  wire [ 3:0] m2s_aw_id,
+  input  wire [ 2:0] m2s_aw_prot,
+  output wire        m2s_aw_ready,
+  input  wire [63:0] m2s_wdata,
+  input  wire        m2s_wvalid,
+  input  wire [ 8:0] m2s_wstrb,
+  output wire        m2s_wready,
+  input  wire [63:0] m2s_ar_addr,
+  input  wire        m2s_ar_valid,
+  input  wire [ 3:0] m2s_ar_id,
+  input  wire [ 2:0] m2s_ar_prot,
+  output wire        m2s_ar_ready,
+  output wire [63:0] m2s_rdata,
+  output wire        m2s_rvalid,
+  output wire [ 3:0] m2s_rid,
+  output wire [ 1:0] m2s_rrsesp,
+  input  wire        m2s_rready,
+  output wire        m2s_bvalid,
+  output wire [ 3:0] m2s_bid,
+  output wire [ 1:0] m2s_bresp,
+  input  wire        m2s_bready,
+  output wire [63:0] s2m_aw_addr,
+  output wire        s2m_aw_valid,
+  output wire [ 3:0] s2m_aw_id,
+  output wire [ 2:0] s2m_aw_prot,
+  input  wire        s2m_aw_ready,
+  output wire [63:0] s2m_wdata,
+  output wire        s2m_wvalid,
+  output wire [ 8:0] s2m_wstrb,
+  input  wire        s2m_wready,
+  output wire [63:0] s2m_ar_addr,
+  output wire        s2m_ar_valid,
+  output wire [ 3:0] s2m_ar_id,
+  output wire [ 2:0] s2m_ar_prot,
+  input  wire        s2m_ar_ready,
+  input  wire [63:0] s2m_rdata,
+  input  wire        s2m_rvalid,
+  input  wire [ 3:0] s2m_rid,
+  input  wire [ 1:0] s2m_rrsesp,
+  output wire        s2m_rready,
+  input  wire        s2m_bvalid,
+  input  wire [ 3:0] s2m_bid,
+  input  wire [ 1:0] s2m_bresp,
+  output wire        s2m_bready
 );
 
-logic [63:0] s2m_aw_addr;
-logic        s2m_aw_valid;
-logic [ 3:0] s2m_aw_id;
-logic [ 2:0] s2m_aw_prot;
-logic        s2m_aw_ready;
-logic [63:0] s2m_wdata;
-logic        s2m_wvalid;
-logic [ 8:0] s2m_wstrb;
-logic        s2m_wready;
-logic [63:0] s2m_ar_addr;
-logic        s2m_ar_valid;
-logic [ 3:0] s2m_ar_id;
-logic [ 2:0] s2m_ar_prot;
-logic        s2m_ar_ready;
-logic [63:0] s2m_rdata;
-logic        s2m_rvalid;
-logic [ 3:0] s2m_rid;
-logic [ 1:0] s2m_rrsesp;
-logic        s2m_rready;
-logic        s2m_bvalid;
-logic [ 3:0] s2m_bid;
-logic [ 1:0] s2m_bresp;
-logic        s2m_bready;
+wire [63:0] s2m_aw_addr;
+wire        s2m_aw_valid;
+wire [ 3:0] s2m_aw_id;
+wire [ 2:0] s2m_aw_prot;
+wire        s2m_aw_ready;
+wire [63:0] s2m_wdata;
+wire        s2m_wvalid;
+wire [ 8:0] s2m_wstrb;
+wire        s2m_wready;
+wire [63:0] s2m_ar_addr;
+wire        s2m_ar_valid;
+wire [ 3:0] s2m_ar_id;
+wire [ 2:0] s2m_ar_prot;
+wire        s2m_ar_ready;
+wire [63:0] s2m_rdata;
+wire        s2m_rvalid;
+wire [ 3:0] s2m_rid;
+wire [ 1:0] s2m_rresp;
+wire        s2m_rready;
+wire        s2m_bvalid;
+wire [ 3:0] s2m_bid;
+wire [ 1:0] s2m_bresp;
+wire        s2m_bready;
 
 
   assign aw_addr      = m2s_aw_addr;
@@ -82,14 +82,14 @@ logic        s2m_bready;
   assign aw_id        = m2s_aw_id;
   assign aw_prot      = m2s_aw_prot;
   assign wdata        = m2s_wdata;
- 
+  assign wvalid       = m2s_wvalid;
   assign wstrb        = m2s_wstrb;
   assign ar_addr      = m2s_ar_addr;
   assign ar_valid     = m2s_ar_valid;
   assign ar_id        = m2s_ar_id;
   assign ar_prot      = m2s_ar_prot;
   assign rready       = m2s_rready;
-  assign brready      = m2s_bready;
+  assign bready      = m2s_bready;
   assign wready       = s2m_wready;
   assign aw_ready     = s2m_aw_ready;
   assign ar_ready     = s2m_ar_ready;
