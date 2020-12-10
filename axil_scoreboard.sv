@@ -33,12 +33,16 @@ class axil_scoreboard extends uvm_scoreboard;
    virtual function void write_from_monitor(axi_lite_seq_item pkt);
         if(exp_que.size()) begin
            axi_lite_seq_item exp_pkt = exp_que.pop_front();
+          `uvm_info("print monitor item ", "uh oh", UVM_NONE);
+          pkt.print();
+          `uvm_info("print driver item ", "uh oh", UVM_NONE);
+          exp_pkt.print();
            if( pkt.compare(exp_pkt))
              uvm_report_info(get_type_name(), $psprintf("Sent packet and received packet matched"), UVM_LOW);
            else
              uvm_report_error(get_type_name(), $psprintf("Sent packet and received packet mismatched"), UVM_LOW);
         end else begin
-             //uvm_report_error(get_type_name(), $psprintf("No more packets to in the expected queue to compare"), UVM_LOW);
+             uvm_report_info(get_type_name(), $psprintf("No more packets to in the expected queue to compare"), UVM_LOW);
    		end
    endfunction : write_from_monitor
 

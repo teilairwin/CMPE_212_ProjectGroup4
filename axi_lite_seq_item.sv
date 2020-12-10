@@ -41,15 +41,22 @@ class axi_lite_seq_item extends uvm_sequence_item;
                        addr, data, id, error, rd_wr, mst_slv);
    endfunction : convert2string
 
-   function void  print(uvm_printer printer=null);
+  /* function void  print(uvm_printer printer=null);
      super.print(printer);
-     printer.print_string("mst_slv", mst_slv.name());
-     printer.print_string("rd_wr",   rd_wr.name());
+     //printer.print_string("mst_slv", mst_slv.name());
+     //printer.print_string("rd_wr",   rd_wr.name());
      printer.print_field("addr",     addr,     64, UVM_HEX);
      printer.print_field("data",     data,     64, UVM_HEX);
      printer.print_field("id",       id,        4, UVM_HEX);
      printer.print_field("error",    error,     1, UVM_BIN);
-   endfunction : print
+   endfunction : print*/
+    function void do_print(uvm_printer printer=null);
+     super.do_print(printer);
+     printer.print_field("addr",     addr,     64, UVM_HEX);
+     printer.print_field("data",     data,     64, UVM_HEX);
+     printer.print_field("id",       id,        4, UVM_HEX);
+     printer.print_field("error",    error,     1, UVM_BIN);
+   endfunction : do_print
  
    function bit compare(uvm_object rhs, uvm_comparer comparer=null);
      axi_lite_seq_item other;
@@ -61,7 +68,7 @@ class axi_lite_seq_item extends uvm_sequence_item;
        this.mst_slv  == other.mst_slv     &&
        this.rd_wr    == other.rd_wr       &&
        this.error    == other.error       &&
-       this.id       == other.id          &&
+       //this.id       == other.id          &&
        this.data     == other.data        &&
        this.addr     == other.addr        
      );

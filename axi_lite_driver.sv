@@ -23,19 +23,21 @@ class axi_lite_driver extends uvm_driver#(axi_lite_seq_item);
      end
      else begin
        if (!uvm_config_db#(virtual axi_lite_if)::get(this,"","vif",vif)) begin
-         `uvm_fatal("APB/DRV/NOVIF", "uh oh");
+         `uvm_fatal("AXIL/DRV/NOVIF", "uh oh");
        end
      end
    endfunction: build_phase
  
    task run_phase(uvm_phase phase);
       axi_lite_seq_item req;
+      //axi_lite_seq_item reqDup;
       // Do we need to call some reset logic ?
       super.run_phase(phase); 
 
       forever begin
          @vif.master_cb;
          seq_item_port.get_next_item(req);
+         Drvr2Sb_port.write(req);
          @vif.master_cb;
          //"drive the bus"
          //Decode the AXI_LITE Command and call either the read/write function
@@ -57,6 +59,23 @@ class axi_lite_driver extends uvm_driver#(axi_lite_seq_item);
   task drive_read(input  bit   [63:0] addr, output logic [63:0] data);
     this.vif.master_cb.awaddr <= addr;
     this.vif.master_cb.arvalid <= 1'b1;
+     fork
+      whileloop :
+      begin
+        while (this.vif.master_cb.arready != 1) @vif.master_cb;
+      end
+      watchDone :
+      begin
+        `uvm_info("repeat fork","argh",UVM_NONE);
+        repeat(5) @vif.master_cb;
+      end
+    join_any
+    disable fork;
+      if(this.vif.master_cb.arready != 1) begin
+        `uvm_warning("time out waiting for arready signal","argh");
+        return;
+      end
+      else `uvm_info("normal procedure","argh",UVM_NONE);
     // one clock cycle delay before the RREADY
     @vif.master_cb;
     this.vif.master_cb.arvalid <= 1'b0;
@@ -72,6 +91,25 @@ class axi_lite_driver extends uvm_driver#(axi_lite_seq_item);
   task drive_write(input bit [63:0] addr, input bit [63:0] data);
     this.vif.master_cb.awaddr <= addr;
     this.vif.master_cb.awvalid <= 1'b1;
+    `uvm_info("before fork","argh",UVM_NONE);
+    fork
+      whileloop :
+      begin
+         while (this.vif.master_cb.wready != 1) @vif.master_cb;
+      end
+      watchDone :
+      begin
+        `uvm_info("repeat fork","argh",UVM_NONE);
+        repeat(5) @vif.master_cb;
+      end
+    join_any
+    disable fork;
+      if(this.vif.master_cb.wready != 1) begin
+        `uvm_warning("time out waiting for wready signal","argh");
+        return;
+      end
+      else `uvm_info("normal procedure","argh",UVM_NONE);
+         
 
     this.vif.master_cb.wdata <= data;
     this.vif.master_cb.wvalid <= 1'b1;
