@@ -7,7 +7,8 @@ typedef axi_lite_agent;
 class axi_lite_driver extends uvm_driver#(axi_lite_seq_item);
   `uvm_component_utils(axi_lite_driver)
  
-   virtual axi_lite_if vif;
+  virtual axi_lite_if vif;
+  uvm_event  reset_done; 
   uvm_analysis_port #(axi_lite_seq_item) Drvr2Sb_port;
   
    function new(string name="axi_lite_driver", uvm_component parent);
@@ -26,6 +27,10 @@ class axi_lite_driver extends uvm_driver#(axi_lite_seq_item);
          `uvm_fatal("AXIL/DRV/NOVIF", "uh oh");
        end
      end
+
+    if(!uvm_config_db#(uvm_event)::get( null, "*", "reset_done", reset_done))begin
+	    `uvm_fatal(this.get_name(), "No reset_done specified for this test instance")
+    end
    endfunction: build_phase
  
    task run_phase(uvm_phase phase);
@@ -34,20 +39,24 @@ class axi_lite_driver extends uvm_driver#(axi_lite_seq_item);
       // Do we need to call some reset logic ?
       super.run_phase(phase); 
 
+      reset_done.wait_trigger();
+
       forever begin
          @vif.master_cb;
          seq_item_port.get_next_item(req);
+         `uvm_info("feeding item from driver to scoreboard","huh",UVM_NONE);
+         req.print();
          Drvr2Sb_port.write(req);
          @vif.master_cb;
          //"drive the bus"
          //Decode the AXI_LITE Command and call either the read/write function
         case (req.rd_wr)
          axi_lite_seq_item::READ:  begin
-          drive_read(req.addr, req.data);  
-          uvm_report_info("AXI_LITE_DRIVER ", $psprintf("Got Transaction %s",req.convert2string()));
+          uvm_report_info("AXI_LITE_DRIVER ", $psprintf("Got read Transaction %s",req.convert2string()));
+          drive_read(req.addr, req.data);
          end
          axi_lite_seq_item::WRITE: begin
-          uvm_report_info("AXI_LITE_DRIVER ", $psprintf("Got Transaction %s",req.convert2string()));
+          uvm_report_info("AXI_LITE_DRIVER ", $psprintf("Got write Transaction %s",req.convert2string()));
           drive_write(req.addr, req.data);
          end
        endcase
@@ -57,7 +66,7 @@ class axi_lite_driver extends uvm_driver#(axi_lite_seq_item);
    endtask: run_phase
 
   task drive_read(input  bit   [63:0] addr, output logic [63:0] data);
-    this.vif.master_cb.awaddr <= addr;
+    this.vif.master_cb.araddr <= addr;
     this.vif.master_cb.arvalid <= 1'b1;
      fork
       whileloop :

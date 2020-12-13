@@ -27,6 +27,8 @@ class axil_scoreboard extends uvm_scoreboard;
     endfunction : new
 
     virtual function void write_from_driver(axi_lite_seq_item tr);
+        `uvm_info("scoreboard receives item from driver","huh",UVM_NONE);
+        tr.print();
         exp_que.push_back(tr);
    endfunction : write_from_driver
 

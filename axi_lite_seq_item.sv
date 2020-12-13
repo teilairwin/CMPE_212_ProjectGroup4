@@ -62,16 +62,29 @@ class axi_lite_seq_item extends uvm_sequence_item;
      axi_lite_seq_item other;
      
      if(!$cast(other, rhs)) return 0;
-     
-     return(
-       super.do_compare(rhs, comparer)    &&
-       this.mst_slv  == other.mst_slv     &&
-       this.rd_wr    == other.rd_wr       &&
-       this.error    == other.error       &&
-       //this.id       == other.id          &&
-       this.data     == other.data        &&
-       this.addr     == other.addr        
-     );
+
+     //TODO for simnplicity, we just check addr for read items. This can be modified 
+     // to include other fields comparison such 
+     //as checking read data range based on slave read data constraint
+     if (this.rd_wr == axi_lite_seq_item::READ) begin
+       return(
+        super.do_compare(rhs, comparer)    &&
+        this.addr == other.addr
+        );
+     end
+
+
+     else begin
+      return(
+        super.do_compare(rhs, comparer)    &&
+        this.mst_slv  == other.mst_slv     &&
+        this.rd_wr    == other.rd_wr       &&
+        this.error    == other.error       &&
+        //this.id       == other.id          &&
+        this.data     == other.data        &&
+        this.addr     == other.addr        
+      );
+     end
    endfunction : compare
 
 endclass: axi_lite_seq_item
